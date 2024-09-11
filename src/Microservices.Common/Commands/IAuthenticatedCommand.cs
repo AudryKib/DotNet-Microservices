@@ -1,6 +1,6 @@
 ﻿namespace Microservices.Common.Commands
 {
-    internal interface IAuthenticatedCommand : ICommand
+    public interface IAuthenticatedCommand : ICommand
     {
         Guid Userid { get; set; }
 

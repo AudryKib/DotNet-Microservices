@@ -1,6 +1,6 @@
 ﻿namespace Microservices.Common.Events
 {
-    public interface IAuthenticatedEvents : IEvents
+    public interface IAuthenticatedEvents : IEvent
     {
         Guid UserId { get; }
     }

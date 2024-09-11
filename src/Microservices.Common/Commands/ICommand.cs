@@ -1,7 +1,7 @@
 ﻿namespace Microservices.Common.Commands
 {
     //Marker interface
-    internal interface ICommand
+    public interface ICommand
     {
     }
 }

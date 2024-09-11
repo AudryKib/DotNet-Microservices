@@ -1,6 +1,6 @@
 ﻿namespace Microservices.Common.Events
 {
-    internal interface IEventhandler<in T> where T : IEvents
+    public interface IEventHandler<in T> where T : IEvent
     {
         Task HandleAsync(T @event);
     }
