@@ -17,11 +17,12 @@ namespace Microservices.Common.Services
         {
             _webHost = webHost;
         }
+
         public void Run() => _webHost.Start();
 
-        public static HostBuilder Create<Tstartup>(string[] args) where Tstartup : class
+        public static HostBuilder Create<TStartup>(string[] args) where TStartup : class
         {
-            Console.Title = typeof(Tstartup).Namespace;
+            Console.Title = typeof(TStartup).Namespace;
             var config = new ConfigurationBuilder()
                             .AddEnvironmentVariables()
                             .AddCommandLine(args)
@@ -29,8 +30,7 @@ namespace Microservices.Common.Services
 
             var webHostBuilder = WebHost.CreateDefaultBuilder(args)
                 .UseConfiguration(config)
-                .UseStartup<Tstartup>();
-
+                .UseStartup<TStartup>();
 
             return new HostBuilder(webHostBuilder.Build());
         }
@@ -38,13 +38,13 @@ namespace Microservices.Common.Services
         public abstract class BuilderBase
         {
             public abstract ServiceHost Build();
-
         }
 
         public class HostBuilder : BuilderBase
         {
             private readonly IWebHost _webHost;
             private IBusClient _bus;
+
             public HostBuilder(IWebHost webHost)
             {
                 _webHost = webHost;
@@ -52,10 +52,12 @@ namespace Microservices.Common.Services
 
             public BusBuilder UseRabbitMq()
             {
-                _bus = (IBusClient)_webHost.Services.GetService(typeof(IBusClient));
+                _bus = (IBusClient)_webHost.Services.GetService(typeof(IBusClient))
+                       ?? throw new InvalidOperationException("IBusClient not registered in the DI container.");
 
                 return new BusBuilder(_webHost, _bus);
             }
+
             public override ServiceHost Build()
             {
                 return new ServiceHost(_webHost);
@@ -66,6 +68,7 @@ namespace Microservices.Common.Services
         {
             private readonly IWebHost _webHost;
             private IBusClient _bus;
+
             public BusBuilder(IWebHost webHost, IBusClient busClient)
             {
                 _webHost = webHost;
@@ -75,18 +78,20 @@ namespace Microservices.Common.Services
             public BusBuilder SubscribeToCommand<TCommand>() where TCommand : ICommand
             {
                 var handler = (ICommandHandler<TCommand>)_webHost.Services
-                    .GetService(typeof(ICommandHandler<TCommand>));
+                    .GetService(typeof(ICommandHandler<TCommand>))
+                    ?? throw new InvalidOperationException($"ICommandHandler<{typeof(TCommand).Name}> not registered in the DI container.");
+
                 _bus.WithCommandHandlerAsync(handler);
 
                 return this;
             }
 
-
-
             public BusBuilder SubscribeToEvent<TEvent>() where TEvent : IEvent
             {
                 var handler = (IEventHandler<TEvent>)_webHost.Services
-                    .GetService(typeof(IEventHandler<TEvent>));
+                    .GetService(typeof(IEventHandler<TEvent>))
+                    ?? throw new InvalidOperationException($"IEventHandler<{typeof(TEvent).Name}> not registered in the DI container.");
+
                 _bus.WithEventHandlerAsync(handler);
 
                 return this;
@@ -97,6 +102,5 @@ namespace Microservices.Common.Services
                 return new ServiceHost(_webHost);
             }
         }
-
     }
 }

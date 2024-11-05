@@ -1,9 +1,9 @@
 ﻿namespace Microservices.Common.Commands
 {
-    internal class CreateActivity : IAuthenticatedCommand
+    public class CreateActivity : IAuthenticatedCommand
     {
         public Guid Id { get; set; }
-        public Guid Userid { get; }
+        public Guid UserId { get; }
         public string Category { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
