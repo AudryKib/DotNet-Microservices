@@ -1,8 +1,6 @@
-using System;
-using System.Threading.Tasks;
-using Actio.Services.Activities.Domain.Models;
+using Microservices.Services.Activities.Domain.Models;
 
-namespace Actio.Services.Activities.Domain.Repositories
+namespace Microservices.Services.Activities.Domain.Repositories
 {
     public interface IActivityRepository
     {
