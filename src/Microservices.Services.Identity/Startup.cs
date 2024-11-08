@@ -1,4 +1,9 @@
-﻿using Microservices.Common.RabbitMq;
+﻿using Microservices.Common.Commands;
+using Microservices.Common.Mongo;
+using Microservices.Common.RabbitMq;
+using Microservices.Services.Identity.Domain.Repositories;
+using Microservices.Services.Identity.Domain.Services;
+using Microservices.Services.Identity.Handlers;
 
 namespace Microservices.Services.Identity
 {
@@ -11,7 +16,7 @@ namespace Microservices.Services.Identity
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
+        // Inside the ConfigureServices method
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
@@ -19,12 +24,14 @@ namespace Microservices.Services.Identity
 
             //services.AddJwt(Configuration);
             services.AddRabbitMq(Configuration);
-            //services.AddMongoDb(Configuration);
+            services.AddMongoDb(Configuration);
 
             //// Link handlers interfaces with handlers.
+            services.AddSingleton<ICommandHandler<CreateUser>, CreateUserHandler>();
+            services.AddSingleton<IEncrypter, Encrypter>();
+            services.AddSingleton<IUserRepository, UserRepository>();
             //    services.AddSingleton<ICommandHandler<ActivityCreated>, ActivityCreatedhandler>();
-            //services.AddSingleton<IEventHandler<UserAuthenticated>, UserAuthenticatedHandler>();
-            //services.AddSingleton<IEventHandler<UserCreated>, UserCreatedHandler>();
+
             //services.AddSingleton<IActivityRepository, ActivityRepository>();
         }
 
