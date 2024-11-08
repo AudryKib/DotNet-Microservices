@@ -1,4 +1,5 @@
-﻿using Microservices.Common.Commands;
+﻿using Actio.Services.Activities.Services;
+using Microservices.Common.Commands;
 using Microservices.Common.Mongo;
 using Microservices.Common.RabbitMq;
 using Microservices.Services.Activities.Domain.Repositories;
@@ -33,6 +34,7 @@ namespace Microservices.Services.Activities
             services.AddSingleton<IActivityRepository, ActivityRepository>();
             services.AddSingleton<ICategoryRepository, CategoryRepository>();
             services.AddSingleton<IDatabaseSeeder, CustomMongoSeeder>();
+            services.AddSingleton<IActivityService, ActivityService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

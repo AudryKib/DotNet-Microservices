@@ -14,8 +14,11 @@ namespace Microservices.Services.Activities.Repositories
         {
             _database = database;
         }
-        public async Task<Category> GetAsync(Guid id)
-            => await Collection.AsQueryable().FirstOrDefaultAsync(x => x.Id == id);
+        public async Task<Category> GetAsync(string name)
+             => await Collection
+                 .AsQueryable()
+                 .FirstOrDefaultAsync(x => x.Name == name.ToLowerInvariant()); // <= MongoDB.Driver.Linq
+
 
         public async Task<IEnumerable<Category>> BrowseAsync()
             => await Collection.AsQueryable().ToListAsync();

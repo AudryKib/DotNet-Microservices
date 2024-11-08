@@ -1,4 +1,5 @@
-//using Actio.Common.Exceptions;
+
+using Microservices.Common.Exceptions;
 
 namespace Microservices.Services.Activities.Domain.Models
 {
@@ -19,7 +20,7 @@ namespace Microservices.Services.Activities.Domain.Models
         {
             if (string.IsNullOrWhiteSpace(name))
             {
-                //  throw new ActioException("empty_activity_name", $"Activity: name can not be empty.");
+                throw new MicroException("empty_activity_name", $"Activity: name can not be empty.");
             }
 
             Id = Guid.NewGuid();

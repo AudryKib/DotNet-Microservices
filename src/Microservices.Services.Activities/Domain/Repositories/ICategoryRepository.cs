@@ -4,7 +4,7 @@ namespace Microservices.Services.Activities.Domain.Repositories
 {
     public interface ICategoryRepository
     {
-        Task<Category> GetAsync(Guid id);
+        Task<Category> GetAsync(string name);
         Task<IEnumerable<Category>> BrowseAsync();
         Task AddAsync(Category category);
     }
