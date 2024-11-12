@@ -14,10 +14,14 @@ namespace Microservices.Api.Controllers
         {
             _busClient = busClient;
         }
+        [HttpGet("")]
+        public IActionResult Get() => Content("Hello from Microservice API!, This is the User Controller");
 
-        [HttpPost("register")]
+        [HttpPost("")]
         public async Task<IActionResult> Post([FromBody] CreateUser command)
         {
+            Console.WriteLine("CreateUser command received");
+
             await _busClient.PublishAsync(command);
 
             return Accepted();

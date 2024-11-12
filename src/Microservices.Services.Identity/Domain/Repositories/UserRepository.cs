@@ -7,12 +7,11 @@ namespace Microservices.Services.Identity.Domain.Repositories
     public class UserRepository : IUserRepository
     {
         private readonly IMongoDatabase _database;
-        private readonly ILogger _logger;
 
-        public UserRepository(IMongoDatabase database, ILogger logger)
+        public UserRepository(IMongoDatabase database)
         {
             _database = database;
-            _logger = logger;
+
         }
 
         public async Task<User> GetAsync(Guid id)

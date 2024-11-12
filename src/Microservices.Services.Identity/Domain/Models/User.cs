@@ -1,10 +1,13 @@
 ﻿using Microservices.Common.Exceptions;
 using Microservices.Services.Identity.Domain.Services;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace Microservices.Services.Identity.Domain.Models
 {
     public class User
     {
+        [BsonRepresentation(BsonType.String)]
         public Guid Id { get; protected set; }
         public string Email { get; protected set; }
         public string Password { get; protected set; }
@@ -16,7 +19,7 @@ namespace Microservices.Services.Identity.Domain.Models
         {
         }
 
-        public User(string email, string name, string role)
+        public User(string email, string name)
         {
             if (string.IsNullOrWhiteSpace(email))
             {
