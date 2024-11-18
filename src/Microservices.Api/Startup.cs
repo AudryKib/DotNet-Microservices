@@ -1,6 +1,11 @@
-﻿using Microservices.Api.handlers;
+﻿
+using Microservices.Api.handlers;
+using Microservices.Api.Repositories;
+using Microservices.Common.Auth;
 using Microservices.Common.Events;
+using Microservices.Common.Mongo;
 using Microservices.Common.RabbitMq;
+
 namespace Microservices.Api
 {
     public class Startup
@@ -18,15 +23,16 @@ namespace Microservices.Api
             services.AddControllers();
             services.AddLogging();
 
-            //services.AddJwt(Configuration);
+            services.AddJwt(Configuration);
+
             services.AddRabbitMq(Configuration);
-            //services.AddMongoDb(Configuration);
+            services.AddMongoDb(Configuration);
 
             //// Link handlers interfaces with handlers.
             services.AddSingleton<IEventHandler<ActivityCreated>, ActivityCreatedhandler>();
             //services.AddSingleton<IEventHandler<UserAuthenticated>, UserAuthenticatedHandler>();
             //services.AddSingleton<IEventHandler<UserCreated>, UserCreatedHandler>();
-            //services.AddSingleton<IActivityRepository, ActivityRepository>();
+            services.AddSingleton<IActivityRepository, ActivityRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
