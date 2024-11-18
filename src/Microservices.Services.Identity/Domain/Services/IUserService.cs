@@ -1,8 +1,10 @@
-﻿namespace Microservices.Services.Identity.Domain.Services
+﻿using Microservices.Common.Auth;
+
+namespace Microservices.Services.Identity.Domain.Services
 {
     public interface IUserService
     {
         Task RegisterAsync(string email, string password, string name);
-        Task LoginAsync(string email, string password);
+        Task<JsonWebToken> LoginAsync(string email, string password);
     }
 }

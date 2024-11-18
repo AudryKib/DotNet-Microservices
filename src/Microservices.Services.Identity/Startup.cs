@@ -1,4 +1,5 @@
-﻿using Microservices.Common.Commands;
+﻿using Microservices.Common.Auth;
+using Microservices.Common.Commands;
 using Microservices.Common.Mongo;
 using Microservices.Common.RabbitMq;
 using Microservices.Services.Identity.Domain.Repositories;
@@ -20,19 +21,21 @@ namespace Microservices.Services.Identity
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
             services.AddLogging();
 
-            //services.AddJwt(Configuration);
+            services.AddJwt(Configuration);
+
             services.AddRabbitMq(Configuration);
+
             services.AddMongoDb(Configuration);
 
             //// Link handlers interfaces with handlers.
             services.AddSingleton<ICommandHandler<CreateUser>, CreateUserHandler>();
             services.AddSingleton<IEncrypter, Encrypter>();
             services.AddSingleton<IUserRepository, UserRepository>();
-            //    services.AddSingleton<ICommandHandler<ActivityCreated>, ActivityCreatedhandler>();
+            services.AddSingleton<IUserService, UserService>();
 
-            //services.AddSingleton<IActivityRepository, ActivityRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

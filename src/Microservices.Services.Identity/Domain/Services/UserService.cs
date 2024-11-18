@@ -1,4 +1,5 @@
 ﻿
+using Microservices.Common.Auth;
 using Microservices.Common.Exceptions;
 using Microservices.Services.Identity.Domain.Models;
 using Microservices.Services.Identity.Domain.Repositories;
@@ -9,11 +10,13 @@ namespace Microservices.Services.Identity.Domain.Services
     {
         private readonly IUserRepository _userRepository;
         private readonly IEncrypter _encrypter;
+        private readonly IJWTHandler _jWTHandler;
 
-        public UserService(IUserRepository userRepository, IEncrypter encrypter)
+        public UserService(IUserRepository userRepository, IEncrypter encrypter, IJWTHandler jWTHandler)
         {
             _userRepository = userRepository;
             _encrypter = encrypter;
+            _jWTHandler = jWTHandler;
         }
 
 
@@ -31,7 +34,7 @@ namespace Microservices.Services.Identity.Domain.Services
             await _userRepository.AddAsync(user);
         }
 
-        public async Task LoginAsync(string email, string password)
+        public async Task<JsonWebToken> LoginAsync(string email, string password)
         {
             var user = await _userRepository.GetAsync(email);
 
@@ -44,6 +47,8 @@ namespace Microservices.Services.Identity.Domain.Services
             {
                 throw new MicroException("invalid_credentials", $"Invalid credentials.");
             }
+
+            return _jWTHandler.Create(user.Id);
         }
     }
 }
